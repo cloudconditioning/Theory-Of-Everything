@@ -2,8 +2,8 @@ name: Deploy Identity Infrastructure
 
 on:
   push:
-    paths:
-       - './identity/**'
+    # paths:
+    #   - './identity/**'
     branches:
         - main
         - dev
