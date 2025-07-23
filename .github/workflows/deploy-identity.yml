@@ -77,4 +77,4 @@ jobs:
         - name: Terraform Apply (Optional)
           working-directory: ./identity
           if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-          run: terrafrom apply -auto-approve -input=false 
+          run: terraform apply -auto-approve -input=false 
