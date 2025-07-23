@@ -95,16 +95,16 @@ data "azurerm_subscription" "current" {}
 resource "azurerm_role_assignment" "user_admin" {
   scope              = data.azurerm_subscription.current.id
   role_definition_id = "/subscriptions/4bb2f61b-1c39-4da3-8b77-3fe0d8fe4370/providers/Microsoft.Authorization/roleDefinitions/18d7d88d-d35e-4fb5-a5c3-7773c20a72d9"
-  principal_id       = "00000000-0000-0000-0000-000000000000"
+  principal_id       = "a5eeab18-d039-4cce-8b53-b886dcc94872"
 }
 
 import {
   to = azurerm_role_assignment.reader
-  id = "/subscriptions/4bb2f61b-1c39-4da3-8b77-3fe0d8fe4370/providers/Microsoft.Authorization/roleAssignments/377d9ed4-8641-4608-b8df-014eef99b1bd"
+  id = "/subscriptions/4bb2f61b-1c39-4da3-8b77-3fe0d8fe4370/providers/Microsoft.Authorization/roleAssignments/04d14db2-4519-40ae-9366-57efb220821c"
 }
 
 resource "azurerm_role_assignment" "reader" {
   scope              = data.azurerm_subscription.current.id
   role_definition_id = "/subscriptions/4bb2f61b-1c39-4da3-8b77-3fe0d8fe4370/providers/Microsoft.Authorization/roleDefinitions/acdd72a7-3385-48ef-bd42-f606fba81ae7"
-  principal_id       = "00000000-0000-0000-0000-000000000000"
+  principal_id       = "a5eeab18-d039-4cce-8b53-b886dcc94872"
 }
