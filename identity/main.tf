@@ -83,3 +83,28 @@ module "storage-blob-data-contributor-role-assignment" {
 
 }
 
+############## Import Role Assignments ##################
+
+import {
+  to = azurerm_role_assignment.user_admin
+  id = "/subscriptions/4bb2f61b-1c39-4da3-8b77-3fe0d8fe4370/providers/Microsoft.Authorization/roleAssignments/ef344717-db6d-4d5a-9bfa-da6fd7755121"
+}
+
+data "azurerm_subscription" "current" {}
+
+resource "azurerm_role_assignment" "user_admin" {
+  scope              = data.azurerm_subscription.current.id
+  role_definition_id = "/subscriptions/4bb2f61b-1c39-4da3-8b77-3fe0d8fe4370/providers/Microsoft.Authorization/roleDefinitions/18d7d88d-d35e-4fb5-a5c3-7773c20a72d9"
+  principal_id       = "00000000-0000-0000-0000-000000000000"
+}
+
+import {
+  to = azurerm_role_assignment.reader
+  id = "/subscriptions/4bb2f61b-1c39-4da3-8b77-3fe0d8fe4370/providers/Microsoft.Authorization/roleAssignments/377d9ed4-8641-4608-b8df-014eef99b1bd"
+}
+
+resource "azurerm_role_assignment" "reader" {
+  scope              = data.azurerm_subscription.current.id
+  role_definition_id = "/subscriptions/4bb2f61b-1c39-4da3-8b77-3fe0d8fe4370/providers/Microsoft.Authorization/roleDefinitions/acdd72a7-3385-48ef-bd42-f606fba81ae7"
+  principal_id       = "00000000-0000-0000-0000-000000000000"
+}
