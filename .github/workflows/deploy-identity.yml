@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'identity/**'
+      - '.github/workflows/deploy-identity.yml'
     branches:
         - main
         - dev
