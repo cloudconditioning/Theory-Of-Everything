@@ -83,12 +83,3 @@ module "storage-blob-data-contributor-role-assignment" {
 
 }
 
-################################################    TEST CODE   ################################################
-
-module "self-storage-blob-data-contributor-role-assignment" {
-  source               = "./azure-role-assignments"
-  role_definition_name = local.storage_blob_data_contributor_role
-  principal_id         = "68b75708-6c25-48c2-9bd9-bc6f7a730c0e"
-  scope                = data.azurerm_storage_container.backend_storage_container.id
-
-}
