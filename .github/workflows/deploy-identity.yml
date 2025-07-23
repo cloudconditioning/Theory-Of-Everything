@@ -2,15 +2,15 @@ name: Deploy Identity Infrastructure
 
 on:
   push:
-    # paths:
-    #   - './identity/**'
+    paths:
+      - 'identity/**'
     branches:
         - main
         - dev
       
   pull_request:
     paths:
-      - './identity/**'
+      - 'identity/**'
     branches:
     - main
     - dev
@@ -40,11 +40,11 @@ jobs:
         - name: Set up Terraform
           uses: hashicorp/setup-terraform@v3
           with:
-            terraform_version: 1.12.2
+            terraform_version: 1.12.x
         
             # Auzre login via OIDC
         - name: Azure Login (OIDC)
-          uses: azure/login@v1
+          uses: azure/login@v2
           with:
             client-id: ${{ secrets.ARM_CLIENT_ID }} # Client ID of the UAMI
             tenant-id: ${{ secrets.ARM_TENANT_ID }}
