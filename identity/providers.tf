@@ -16,7 +16,7 @@ terraform {
     storage_account_name = "tfstateccj71qzqqm"
     container_name       = "tfstate"
     key                  = "identity.tfstate"
-    use_azuread_auth = true # Use Azure AD authentication for the backend
+    use_azuread_auth     = true # Use Azure AD authentication for the backend
 
   }
 }

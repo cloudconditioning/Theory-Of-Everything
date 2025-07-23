@@ -41,8 +41,8 @@ module "gh-federated-identity-branches-pull-request" {
 # Assign Roles to the User Assigned Managed Identity: Directory Readers, Resource Group or Subscription Contributor, Storage Blob Data Contributor 
 ## Obtain scope of the Resource group and Subscription
 data "azurerm_resource_group" "identity_rg" {
-  name = module.rg-identity.name_of_resource_group
-  depends_on = [ module.rg-identity ]
+  name       = module.rg-identity.name_of_resource_group
+  depends_on = [module.rg-identity]
 }
 
 ## Create Directory Readers Role
