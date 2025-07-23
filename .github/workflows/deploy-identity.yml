@@ -21,7 +21,7 @@ permissions:
   id-token: write # required for OIDC authentication
 
 env:
-  subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
 
 
 jobs:
