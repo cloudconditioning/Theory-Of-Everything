@@ -36,7 +36,7 @@ jobs:
         - name: Set up Terraform
           uses: hashicorp/setup-terraform@v3
           with:
-            terraform_version: 1.12.0
+            terraform_version: 1.12.2
         
         # Azure Login via OIDC
         - name: Azure Login (OIDC)
@@ -44,13 +44,13 @@ jobs:
           with:
             client-id: ${{ secrets.ARM_CLIENT_ID }}
             tenant-id: ${{ secrets.ARM_TENANT_ID }}
-            subscription-id: ${{ secrets.ARM_SUSBSCRIPTION_ID}}
+            subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID}}
         
         # Run Terraform Commands
 
         # Terraform Init
         - name: Terraform Initialization
-          run: terraform init -input=false -backend-config="resource_group_name=${{ secrets.BACKEND_AZURE_RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ secrets.BACKEND_AZURE_STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ secrets.BACKEND_aZURE_STORAGE_ACCOUNT_CONTAINER_NAME }}" -backend-config="key=identity.tfstate"
+          run: terraform init -input=false -backend-config="resource_group_name=${{ secrets.BACKEND_AZURE_RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ secrets.BACKEND_AZURE_STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ secrets.BACKEND_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME }}" -backend-config="key=identity.tfstate"
 
         # Terraform Format Check
         - name: Terraform Format
