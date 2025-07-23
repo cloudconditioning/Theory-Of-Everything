@@ -38,14 +38,14 @@ jobs:
           with:
             terraform_version: 1.12.2
         
-        # Azure Login via OIDC
+            # Auzre login via OIDC
         - name: Azure Login (OIDC)
           uses: azure/login@v1
           with:
-            client-id: ${{ secrets.ARM_CLIENT_ID }}
+            client-id: ${{ secrets.ARM_CLIENT_ID }} # Client ID of the UAMI
             tenant-id: ${{ secrets.ARM_TENANT_ID }}
-            subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID}}
-            
+            subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        
         
         # Run Terraform Commands
 
