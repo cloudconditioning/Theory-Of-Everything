@@ -2,15 +2,15 @@ name: Deploy Identity Infrastructure
 
 on:
   push:
-    # paths:
-      #  - 'identity/**'
+    paths:
+        - './identity/**'
     branches:
         - main
         - dev
       
   pull_request:
     paths:
-      - 'identity/**'
+      - './identity/**'
     branches:
     - main
     - dev
