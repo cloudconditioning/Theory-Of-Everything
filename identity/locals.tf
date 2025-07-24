@@ -10,6 +10,8 @@ locals {
     "Directory Readers"             = "88d8e3e3-8f55-4a1e-953a-9b9898b8876b"
     "Storage Blob Data Contributor" = "ba92f5b4-2d11-453d-a403-e96b0029c9fe"
   }
+  group_creator_role_name   = "Resource Group Creator"
+  group_creator_description = "This user will be able to create and read user groups"
 }
 
 

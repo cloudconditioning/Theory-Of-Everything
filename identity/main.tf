@@ -115,3 +115,24 @@ resource "azurerm_role_assignment" "reader" {
     prevent_destroy = true
   }
 }
+
+module "custom_role_resource_group_creator" {
+  source                  = "./azure-custom-role-definitions"
+  custom_role_name        = local.group_creator_role_name
+  scope                   = data.azurerm_subscription.current.id
+  custom_role_description = local.group_creator_description
+
+  permissions = [
+    {
+      actions     = ["Microsoft.Resources/subscriptions/resourceGroups/read", "Microsoft.Resources/subscriptions/resourceGroups/write"]
+      not_actions = ["Microsoft.Resources/subscriptions/resourceGroups/delete"]
+    }
+  ]
+
+  assignable_scopes = [
+    data.azurerm_subscription.current.id
+  ]
+
+
+
+}

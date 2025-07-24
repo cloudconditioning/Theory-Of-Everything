@@ -59,3 +59,7 @@ output "Resource_Group_Scope" {
   value       = data.azurerm_resource_group.identity_rg.id
   description = "Resource Group Scope for Role Assignment"
 }
+
+output "custom_group_creator_role" {
+  value = module.custom_role_resource_group_creator.custom_role_definition_id
+}
