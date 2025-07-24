@@ -4,7 +4,7 @@ module "rg-identity" {
   source                  = "./resource-group"
   resource_group_name     = var.identity_resource_group_name
   resource_group_location = var.identity_resource_group_location
-  
+
 }
 
 # Create the GitHub User Assigned Managed Identity
@@ -97,7 +97,7 @@ resource "azurerm_role_assignment" "user_admin" {
   scope              = data.azurerm_subscription.current.id
   role_definition_id = "/subscriptions/4bb2f61b-1c39-4da3-8b77-3fe0d8fe4370/providers/Microsoft.Authorization/roleDefinitions/18d7d88d-d35e-4fb5-a5c3-7773c20a72d9"
   principal_id       = "a5eeab18-d039-4cce-8b53-b886dcc94872"
-    lifecycle {
+  lifecycle {
     prevent_destroy = true
   }
 }
@@ -111,7 +111,7 @@ resource "azurerm_role_assignment" "reader" {
   scope              = data.azurerm_subscription.current.id
   role_definition_id = "/subscriptions/4bb2f61b-1c39-4da3-8b77-3fe0d8fe4370/providers/Microsoft.Authorization/roleDefinitions/acdd72a7-3385-48ef-bd42-f606fba81ae7"
   principal_id       = "a5eeab18-d039-4cce-8b53-b886dcc94872"
-    lifecycle {
+  lifecycle {
     prevent_destroy = true
   }
 }
