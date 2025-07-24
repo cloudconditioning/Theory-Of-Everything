@@ -119,7 +119,7 @@ resource "azurerm_role_assignment" "reader" {
 module "custom_role_resource_group_creator" {
   source                  = "./azure-custom-role-definitions"
   custom_role_name        = local.group_creator_role_name
-  scope                   = data.azurerm_subscription.current.id
+  scope                   = data.azurerm_subscription.current_for_custom_role.id
   custom_role_description = local.group_creator_description
 
   permissions = [
@@ -133,6 +133,13 @@ module "custom_role_resource_group_creator" {
     data.azurerm_subscription.current.id
   ]
 
+}
 
+data "azurerm_subscription" "current_for_custom_role" {}
 
+module "assign_resource_group_creator_custom_role" {
+  source               = "./azure-role-assignments"
+  role_definition_name = module.custom_role_resource_group_creator.custom_role_name
+  scope                = module.custom_role_resource_group_creator.custom_role_scope
+  principal_id         = module.gh-uami.uami_principal_id
 }

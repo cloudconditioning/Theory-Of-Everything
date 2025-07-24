@@ -63,3 +63,11 @@ output "Resource_Group_Scope" {
 output "custom_group_creator_role" {
   value = module.custom_role_resource_group_creator.custom_role_definition_id
 }
+
+output "custom_group_creator_role_scope" {
+  value = module.custom_role_resource_group_creator.custom_role_scope
+}
+
+output "custom_group_creator_role_definition_name" {
+  value = module.custom_role_resource_group_creator.custom_role_name
+}
