@@ -1,0 +1,81 @@
+name: Deploy Enterprise Infrastructure
+
+on:
+  push:
+    paths:
+      - 'enterprise/**'
+      - '.github/workflows/deploy-enterprise.yml'
+    branches:
+        - main
+        - dev
+      
+  pull_request:
+    paths:
+      - 'enterprise/**'
+    branches:
+    - main
+    - dev
+  workflow_dispatch:
+
+permissions:
+  contents: read # read contents of the rep
+  id-token: write # required for OIDC authentication
+
+env:
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+
+
+jobs:
+    terraform:
+      name: Terraform Identity Deployment Worfklow
+      
+      runs-on: ubuntu-latest
+
+      steps:
+
+        # Checkout the code
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        # Set up Terraform
+        - name: Set up Terraform
+          uses: hashicorp/setup-terraform@v3
+          with:
+            terraform_version: 1.12.x
+        
+            # Auzre login via OIDC
+        - name: Azure Login (OIDC)
+          uses: azure/login@v2
+          with:
+            client-id: ${{ secrets.ARM_CLIENT_ID }} # Client ID of the UAMI
+            tenant-id: ${{ secrets.ARM_TENANT_ID }}
+            subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        
+        
+        # Run Terraform Commands
+
+        # Terraform Init
+        - name: Terraform Initialization
+          working-directory: ./enterprise
+          run: terraform init -input=false -backend-config="resource_group_name=${{ secrets.BACKEND_AZURE_RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ secrets.BACKEND_AZURE_STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ secrets.BACKEND_AZURE_STORAGE_ACCOUNT_CONTAINER_NAME }}" -backend-config="key=identity.tfstate"
+
+        # Terraform Format Check
+        - name: Terraform Format
+          working-directory: ./identity
+          run: terraform fmt -check
+
+        # Terraform Validate
+        - name: Terraform Validate
+          working-directory: ./enterprise
+          run: terraform validate
+
+        # Terraform Plan
+        - name: Terraform Plan
+          working-directory: ./enterprise
+          run: terraform plan -input=false -out=tfplan
+
+        # Terraform Apply
+        - name: Terraform Apply (Optional)
+          working-directory: ./enterprise
+          if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+          run: terraform apply -auto-approve -input=false 
