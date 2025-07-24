@@ -25,5 +25,6 @@ terraform {
 provider "azurerm" {
   features {}
   # Subscription ID is set in the environment variable `ARM_SUBSCRIPTION_ID`
-  ## export ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+  ## export ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv) - Bash
+  ### $env:ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv) - PowerShell
 }

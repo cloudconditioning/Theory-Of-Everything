@@ -9,6 +9,11 @@ resource "azurerm_role_assignment" "role_assignment" {
   role_definition_name = var.role_definition_name
   # role_definition_id = var.role_definition_id  # Use this to assign roles as well
   principal_id = var.principal_id
+
+  lifecycle {
+    prevent_destroy = true
+  }
+  
 }
 
 /*

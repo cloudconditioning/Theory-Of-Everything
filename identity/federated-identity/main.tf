@@ -10,4 +10,8 @@ resource "azurerm_federated_identity_credential" "federated_identity" {
     issuer = var.issuer
     parent_id = var.parent_id
     subject = var.subject
+
+      lifecycle {
+    prevent_destroy = true
+  }
 }
