@@ -143,3 +143,12 @@ module "assign_resource_group_creator_custom_role" {
   scope                = module.custom_role_resource_group_creator.custom_role_scope
   principal_id         = module.gh-uami.uami_principal_id
 }
+
+# Importing Contributor Role to GitHub Managed Identity
+
+module "contributor_role_assingment" {
+  source               = "./azure-role-assignments"
+  principal_id         = module.gh-uami.uami_principal_id
+  scope                = data.azurerm_subscription.current.id
+  role_definition_name = "Contributor"
+}
