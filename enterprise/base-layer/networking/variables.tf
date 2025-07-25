@@ -1,11 +1,11 @@
 variable "resource_group_name" {
   type        = string
   description = "Name of the resource group holding enterprise resources"
-  default = "rg-enterprise"
+  default     = "rg-enterprise"
 }
 
 variable "environment_suffix" {
-  type = "string"
+  type    = string
   default = "enterprise"
 }
 variable "nsg_prefix" {
@@ -76,39 +76,39 @@ variable "subnets" {
 
 variable "nsg_rules_map" {
   type = map(object({
-    name = string
-    priority = number
-    direction = string
-    access = string
-    protocol = string
-    source_port_range = string
-    destination_port_range = string
-    source_address_prefix = string
+    name                       = string
+    priority                   = number
+    direction                  = string
+    access                     = string
+    protocol                   = string
+    source_port_range          = string
+    destination_port_range     = string
+    source_address_prefix      = string
     destination_address_prefix = string
   }))
-  default = { 
+  default = {
     "Allow-RDP" = {
-    name = "Allow-RDP"
-    priority = 100
-    direction = "Inbound"
-    access = "Allow"
-    protocol = "Tcp"
-    source_port_range = "*"
-    destination_port_range = "3389"
-    source_address_prefix = "*"
-    destination_address_prefix = "*"
+      name                       = "Allow-RDP"
+      priority                   = 100
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "3389"
+      source_address_prefix      = "*"
+      destination_address_prefix = "*"
 
     }
-      Allow-SSH = {
-    name = "Allow-SSH"
-    priority = 110
-    direction = "Inbound"
-    access = "Allow"
-    protocol = "Tcp"
-    source_port_range = "*"
-    destination_port_range = "22"
-    source_address_prefix = "*"
-    destination_address_prefix = "*"
+    Allow-SSH = {
+      name                       = "Allow-SSH"
+      priority                   = 110
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "22"
+      source_address_prefix      = "*"
+      destination_address_prefix = "*"
 
     }
   }

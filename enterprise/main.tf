@@ -5,3 +5,10 @@ resource "azurerm_resource_group" "rg-enterprise" {
     prevent_destroy = true
   }
 }
+
+
+module "enterprise_vnet" {
+  depends_on = [azurerm_resource_group.rg-enterprise]
+  source     = "./base-layer/networking"
+
+}
