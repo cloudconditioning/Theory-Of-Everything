@@ -74,7 +74,8 @@ variable "subnets" {
   }
 }
 
-variable "nsg_rules_map" {
+
+variable "nsg_rules_bastion" {
   type = map(object({
     name                       = string
     priority                   = number

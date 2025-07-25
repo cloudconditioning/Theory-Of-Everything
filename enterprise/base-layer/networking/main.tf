@@ -55,9 +55,9 @@ resource "azurerm_virtual_network" "vnet" {
 # Create the Network Security Rules
 ## Allow 3389 and SSH
 
-resource "azurerm_network_security_rule" "ns_rule" {
+resource "azurerm_network_security_rule" "nsg_rules_bastion" {
   depends_on                  = [azurerm_network_security_group.nsg]
-  for_each                    = var.nsg_rules_map
+  for_each                    = var.nsg_rules_bastion
   name                        = each.value.name
   priority                    = each.value.priority
   direction                   = each.value.direction
@@ -87,9 +87,9 @@ resource "azurerm_subnet" "enterprise_subnets" {
 
 
 # Associate the nsg to the subnets
-resource "azurerm_subnet_network_security_group_association" "subnet_nsg_association" {
-  depends_on                = [azurerm_network_security_group.nsg]
-  for_each                  = var.subnets
-  subnet_id                 = azurerm_subnet.enterprise_subnets[each.key].id
+resource "azurerm_subnet_network_security_group_association" "bastion_subnet_nsg_association" {
+  depends_on = [azurerm_network_security_group.nsg]
+  # for_each                  = var.subnets
+  subnet_id                 = azurerm_subnet.enterprise_subnets["bastion"].id
   network_security_group_id = azurerm_network_security_group.nsg.id
 }
