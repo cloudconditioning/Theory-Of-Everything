@@ -1,11 +1,12 @@
-variable "resoure_group_name" {
+variable "resource_group_name" {
   type        = string
   description = "Name of the resource group holding enterprise resources"
   default = "rg-enterprise"
 }
 
 variable "environment_suffix" {
-  type = "enterprise"
+  type = "string"
+  default = "enterprise"
 }
 variable "nsg_prefix" {
   type    = string
@@ -84,8 +85,6 @@ variable "nsg_rules_map" {
     destination_port_range = string
     source_address_prefix = string
     destination_address_prefix = string
-    resource_group_name = string
-    network_security_group_name = string
   }))
   default = { 
     "Allow-RDP" = {
@@ -98,11 +97,10 @@ variable "nsg_rules_map" {
     destination_port_range = "3389"
     source_address_prefix = "*"
     destination_address_prefix = "*"
-    resource_group_name = "rg-vnet"
-    network_security_group_name = "nsg1"
+
     }
       Allow-SSH = {
-    name = "Allow-RDP"
+    name = "Allow-SSH"
     priority = 110
     direction = "Inbound"
     access = "Allow"
@@ -111,8 +109,7 @@ variable "nsg_rules_map" {
     destination_port_range = "22"
     source_address_prefix = "*"
     destination_address_prefix = "*"
-    resource_group_name = "rg-vnet"
-    network_security_group_name = "nsg1" 
+
     }
   }
 }
