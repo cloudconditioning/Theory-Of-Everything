@@ -1,6 +1,7 @@
 variable "resoure_group_name" {
   type        = string
   description = "Name of the resource group holding enterprise resources"
+  default = "rg-enterprise"
 }
 
 variable "environment_suffix" {
@@ -68,6 +69,50 @@ variable "subnets" {
     },
     "bastion" = {
       address_prefixes = ["10.0.100.0/24"]
+    }
+  }
+}
+
+variable "nsg_rules_map" {
+  type = map(object({
+    name = string
+    priority = number
+    direction = string
+    access = string
+    protocol = string
+    source_port_range = string
+    destination_port_range = string
+    source_address_prefix = string
+    destination_address_prefix = string
+    resource_group_name = string
+    network_security_group_name = string
+  }))
+  default = { 
+    "Allow-RDP" = {
+    name = "Allow-RDP"
+    priority = 100
+    direction = "Inbound"
+    access = "Allow"
+    protocol = "Tcp"
+    source_port_range = "*"
+    destination_port_range = "3389"
+    source_address_prefix = "*"
+    destination_address_prefix = "*"
+    resource_group_name = "rg-vnet"
+    network_security_group_name = "nsg1"
+    }
+      Allow-SSH = {
+    name = "Allow-RDP"
+    priority = 110
+    direction = "Inbound"
+    access = "Allow"
+    protocol = "Tcp"
+    source_port_range = "*"
+    destination_port_range = "22"
+    source_address_prefix = "*"
+    destination_address_prefix = "*"
+    resource_group_name = "rg-vnet"
+    network_security_group_name = "nsg1" 
     }
   }
 }
