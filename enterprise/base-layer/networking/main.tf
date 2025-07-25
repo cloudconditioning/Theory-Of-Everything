@@ -11,8 +11,8 @@ data "azurerm_resource_group" "rg-enterprise" {
 # Create the Network Security Group
 
 
-resource "azurerm_network_security_group" "nsg" {
-  name                = "${var.nsg_prefix}-${var.environment_suffix}"
+resource "azurerm_network_security_group" "bastion_nsg" {
+  name                = "${var.nsg_prefix}-${var.environment_suffix}-bastion"
   location            = data.azurerm_resource_group.rg-enterprise.location
   resource_group_name = data.azurerm_resource_group.rg-enterprise.name
 
@@ -56,7 +56,7 @@ resource "azurerm_virtual_network" "vnet" {
 ## Allow 3389 and SSH
 
 resource "azurerm_network_security_rule" "nsg_rules_bastion" {
-  depends_on                  = [azurerm_network_security_group.nsg]
+  depends_on                  = [azurerm_network_security_group.bastion_nsg]
   for_each                    = var.nsg_rules_bastion
   name                        = each.value.name
   priority                    = each.value.priority
@@ -68,8 +68,18 @@ resource "azurerm_network_security_rule" "nsg_rules_bastion" {
   source_address_prefix       = each.value.source_address_prefix
   destination_address_prefix  = each.value.destination_address_prefix
   resource_group_name         = data.azurerm_resource_group.rg-enterprise.name
-  network_security_group_name = azurerm_network_security_group.nsg.name
+  network_security_group_name = azurerm_network_security_group.bastion_nsg.name
 
+}
+
+resource "azurerm_network_security_group" "subnet_nsg" {
+  name                = "${var.nsg_prefix}-${var.environment_suffix}-subnet"
+  location            = data.azurerm_resource_group.rg-enterprise.location
+  resource_group_name = data.azurerm_resource_group.rg-enterprise.name
+  tags = {
+    environment = var.environment_suffix
+    managed_by  = "terraform"
+  }
 }
 
 # Create subnets
@@ -81,15 +91,24 @@ resource "azurerm_subnet" "enterprise_subnets" {
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = each.value.address_prefixes
 
-
 }
 
-
-
-# Associate the nsg to the subnets
+# Associate the nsg to the bastion subnet
 resource "azurerm_subnet_network_security_group_association" "bastion_subnet_nsg_association" {
-  depends_on = [azurerm_network_security_group.nsg]
+  depends_on = [azurerm_network_security_group.bastion_nsg]
   # for_each                  = var.subnets
   subnet_id                 = azurerm_subnet.enterprise_subnets["bastion"].id
-  network_security_group_id = azurerm_network_security_group.nsg.id
+  network_security_group_id = azurerm_network_security_group.bastion_nsg.id
+}
+
+# Associate the nsg to the subnets
+resource "azurerm_subnet_network_security_group_association" "subnet_nsg_association" {
+  depends_on = [azurerm_network_security_group.subnet_nsg]
+  for_each = {
+    for key, value in var.subnets :
+    key => value if key != "bastion"
+  }
+  subnet_id                 = azurerm_subnet.enterprise_subnets[each.key].id
+  network_security_group_id = azurerm_network_security_group.subnet_nsg.id
+
 }

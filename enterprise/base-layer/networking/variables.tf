@@ -114,3 +114,4 @@ variable "nsg_rules_bastion" {
     }
   }
 }
+
