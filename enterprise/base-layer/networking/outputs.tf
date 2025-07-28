@@ -24,7 +24,6 @@ output "enterprise_subnet_names" {
 
 }
 
-
 # Bastion NSG Rules
 output "bastion_nsg_rules" {
   value = {
@@ -61,6 +60,16 @@ output "bastion_vm_public_ip" {
 # Windows VM Admin_Username
 output "bastion_vm_username" {
   value = azurerm_windows_virtual_machine.vm_bastion.admin_username
+}
+
+# Bastion VM Shutdown ID
+output "bastion_shutdown_time" {
+  value = azurerm_dev_test_global_vm_shutdown_schedule.bastion_shutdown.daily_recurrence_time
+}
+
+# Bastion VM 
+output "bastion_shutdown_id" {
+  value = azurerm_dev_test_global_vm_shutdown_schedule.bastion_shutdown.id
 }
 
 

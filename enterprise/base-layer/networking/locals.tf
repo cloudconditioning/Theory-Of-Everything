@@ -33,6 +33,12 @@ locals {
     tier       = "bastion"
     managed_by = "terraform"
   }
+
+  timezone = "Eastern Standard Time"
+
+  time_in_minutes = "60"
+
+  my_email = "bmattocks@cloudconditioning.com"
 }
 
 

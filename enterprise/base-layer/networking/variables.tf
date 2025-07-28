@@ -180,3 +180,9 @@ variable "public_ip_bastion_name" {
   type    = string
   default = "public-ip-bastion"
 }
+
+variable "bastion_shutdown_time" {
+  type    = string
+  default = "2100"
+}
+

@@ -153,7 +153,7 @@ resource "azurerm_windows_virtual_machine" "vm_bastion" {
   location              = data.azurerm_resource_group.rg-enterprise.location
   size                  = var.vm_size
   admin_username        = var.admin_username # figure out the way to pass senstive info
-  admin_password        = var.admin_password # same as above
+  admin_password        = var.admin_password # same as above. This is fine for now becauses this computer will be controlled by AD DS.
   network_interface_ids = [azurerm_network_interface.nic_bastion.id]
 
   os_disk {
@@ -170,4 +170,20 @@ resource "azurerm_windows_virtual_machine" "vm_bastion" {
 
   tags = local.bastion_tags
 
+}
+
+# Create auto shutdown for Bastion VM
+resource "azurerm_dev_test_global_vm_shutdown_schedule" "bastion_shutdown" {
+  virtual_machine_id = azurerm_windows_virtual_machine.vm_bastion.id
+  location           = data.azurerm_resource_group.rg-enterprise.location
+  enabled            = true
+
+  daily_recurrence_time = var.bastion_shutdown_time
+  timezone              = local.timezone
+
+  notification_settings {
+    enabled         = true
+    email           = local.my_email
+    time_in_minutes = local.time_in_minutes
+  }
 }
