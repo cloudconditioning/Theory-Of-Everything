@@ -35,10 +35,7 @@ resource "azurerm_virtual_network" "vnet" {
   address_space       = var.vnet_address_space
   dns_servers         = var.dns_servers_addresses
 
-  tags = {
-    environment = var.environment_suffix
-    managed_by  = "terraform"
-  }
+  tags = local.bastion_tags
 
   ## Below code is for creating subnets inline with virtual network
   /*
@@ -70,6 +67,7 @@ resource "azurerm_network_security_rule" "nsg_rules_bastion" {
   resource_group_name         = data.azurerm_resource_group.rg-enterprise.name
   network_security_group_name = azurerm_network_security_group.bastion_nsg.name
 
+
 }
 
 resource "azurerm_network_security_group" "subnet_nsg" {
@@ -99,6 +97,7 @@ resource "azurerm_subnet_network_security_group_association" "bastion_subnet_nsg
   # for_each                  = var.subnets
   subnet_id                 = azurerm_subnet.enterprise_subnets["bastion"].id
   network_security_group_id = azurerm_network_security_group.bastion_nsg.id
+
 }
 
 # Associate the nsg to the subnets
@@ -113,3 +112,62 @@ resource "azurerm_subnet_network_security_group_association" "subnet_nsg_associa
 
 }
 
+# Create the Public IP for the Bastion Windows VM
+resource "azurerm_public_ip" "public_ip_bastion" {
+  name                = var.public_ip_bastion_name
+  resource_group_name = data.azurerm_resource_group.rg-enterprise.name
+  location            = data.azurerm_resource_group.rg-enterprise.location
+  allocation_method   = "Static"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  tags = local.bastion_tags
+
+}
+
+# Create the azurerm_network_interface for the Bastion Windows VM
+resource "azurerm_network_interface" "nic_bastion" {
+  name                = var.bastion_nic
+  location            = data.azurerm_resource_group.rg-enterprise.location
+  resource_group_name = data.azurerm_resource_group.rg-enterprise.name
+
+  ip_configuration {
+    name                          = var.bastion_ip # review what this means exactly
+    subnet_id                     = azurerm_subnet.enterprise_subnets["bastion"].id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.public_ip_bastion.id
+  }
+
+  tags = local.bastion_tags
+}
+
+# Create the bastion for remote access
+## Place in bastion subnet
+## https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_virtual_machine
+
+resource "azurerm_windows_virtual_machine" "vm_bastion" {
+  name                  = var.vm_bastion_name
+  resource_group_name   = data.azurerm_resource_group.rg-enterprise.name
+  location              = data.azurerm_resource_group.rg-enterprise.location
+  size                  = var.vm_size
+  admin_username        = var.admin_username # figure out the way to pass senstive info
+  admin_password        = var.admin_password # same as above
+  network_interface_ids = [azurerm_network_interface.nic_bastion.id]
+
+  os_disk {
+    caching              = var.caching # What does this mean?
+    storage_account_type = var.storage_account_type
+  }
+
+  source_image_reference {
+    publisher = var.publisher_bastion
+    offer     = var.offer_bastion
+    sku       = var.sku_bastion
+    version   = var.version_bastion
+  }
+
+  tags = local.bastion_tags
+
+}

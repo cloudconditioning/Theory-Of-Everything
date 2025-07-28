@@ -29,4 +29,10 @@ locals {
     }
   }
 
+  bastion_tags = {
+    tier       = "bastion"
+    managed_by = "terraform"
+  }
 }
+
+

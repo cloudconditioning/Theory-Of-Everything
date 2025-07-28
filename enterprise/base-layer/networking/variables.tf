@@ -115,3 +115,68 @@ variable "nsg_rules_bastion" {
   }
 }
 
+variable "bastion_nic" {
+  type        = string
+  description = "Name of the NIC Bastion"
+  default     = "nic-bastion"
+}
+
+variable "bastion_ip" {
+  type    = string
+  default = "ip-bastion"
+}
+
+variable "vm_bastion_name" {
+  type    = string
+  default = "enterprise-bastion"
+}
+
+variable "vm_size" {
+  type    = string
+  default = "Standard_B1ms"
+}
+
+variable "admin_username" {
+  type    = string
+  default = "primetime"
+}
+
+variable "admin_password" {
+  type    = string
+  default = "TupacWayne2025!"
+}
+
+variable "caching" {
+  type    = string
+  default = "ReadWrite"
+}
+
+variable "storage_account_type" {
+  type    = string
+  default = "Standard_LRS"
+}
+
+variable "publisher_bastion" {
+  type    = string
+  default = "MicrosoftWindowsServer"
+}
+
+variable "offer_bastion" {
+  type    = string
+  default = "WindowsServer"
+}
+
+variable "sku_bastion" {
+  type    = string
+  default = "2022-datacenter-g2"
+}
+
+variable "version_bastion" {
+  type    = string
+  default = "latest"
+}
+
+variable "public_ip_bastion_name" {
+  type    = string
+  default = "public-ip-bastion"
+}

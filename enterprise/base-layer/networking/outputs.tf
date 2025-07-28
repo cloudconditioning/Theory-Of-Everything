@@ -42,3 +42,25 @@ output "subnet_nsg_rules" {
   }
 }
 */
+
+# Output Windows VM Name
+output "bastion_vm_name" {
+  value = azurerm_windows_virtual_machine.vm_bastion.name
+}
+
+# Windows VM Private IP
+output "bastion_vm_private_IP" {
+  value = azurerm_windows_virtual_machine.vm_bastion.private_ip_address
+}
+
+# Windows VM Public IP
+output "bastion_vm_public_ip" {
+  value = azurerm_windows_virtual_machine.vm_bastion.public_ip_address
+}
+
+# Windows VM Admin_Username
+output "bastion_vm_username" {
+  value = azurerm_windows_virtual_machine.vm_bastion.admin_username
+}
+
+
