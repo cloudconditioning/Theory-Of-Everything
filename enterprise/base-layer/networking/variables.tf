@@ -128,7 +128,7 @@ variable "bastion_ip" {
 
 variable "vm_bastion_name" {
   type    = string
-  default = "enterprise-bastion"
+  default = "ent-bastion"
 }
 
 variable "vm_size" {
