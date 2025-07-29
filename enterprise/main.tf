@@ -14,6 +14,6 @@ module "enterprise_vnet" {
 }
 
 module "active_directory" {
-  source = "./base-layer/identity"
+  source        = "./base-layer/identity"
   dc1_subnet_id = module.enterprise_vnet.subnet_ids["domain-controllers"]
 }
