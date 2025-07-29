@@ -46,7 +46,7 @@ variable "vm_dc1_name" {
 # VM Sizes - https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/overview?tabs=breakdownseries%2Cgeneralsizelist%2Ccomputesizelist%2Cmemorysizelist%2Cstoragesizelist%2Cgpusizelist%2Cfpgasizelist%2Chpcsizelist
 variable "dc1_size" {
   type    = string
-  default = "Standard_B2s_v2"
+  default = "Standard_B1ms"
 }
 
 
