@@ -1,17 +1,22 @@
 variable "resource_group_name" {
-  type = string
+  type    = string
+  default = "rg-enterprise"
 }
 
 variable "location" {
-  type = string
+  type    = string
+  default = "EastUS2"
 }
 
 variable "nic_dc1_name" {
-  type = string
+  type    = string
+  default = "nic-dc1"
+
 }
 
-variable "dc1_ip_name" {
-  type = string
+variable "dc1_private_ip_name" {
+  type    = string
+  default = "private-ip-dc1"
 }
 
 variable "dc1_subnet_id" {
@@ -46,21 +51,41 @@ variable "dc1_size" {
 
 
 variable "dc1_username" {
-  type = string
+  type    = string
+  default = "ccuser"
 }
 
 variable "dc1_password" {
-  type = string
+  type    = string
+  default = "PrimeTime2025"
 }
 
 variable "storage_account_name" {
-  type = string
+  type    = string
+  default = "conditionedcloudent"
+}
+variable "storage_container_name" {
+  type    = string
+  default = "scripts"
 }
 
 variable "storage_account_tier" {
-  type = string
+  type    = string
+  default = "Standard"
 }
 
 variable "dc1_vm_extension_name" {
-  type = string
+  type    = string
+  default = "vm-extension-dc1"
+}
+
+variable "scripts_container" {
+  type    = string
+  default = "scripts"
+}
+
+
+variable "adds_script_name" {
+  type    = string
+  default = "InstallADDS_DC1.ps1"
 }

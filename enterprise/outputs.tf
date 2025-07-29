@@ -15,6 +15,11 @@ output "subnet_names_prefixes" {
   value = module.enterprise_vnet.enterprise_subnet_names
 }
 
+# Out the Subnet IDs
+output "subnet_ids" {
+  value = module.enterprise_vnet.subnet_ids
+}
+
 # Output the Bastion NSG name
 output "bastion_nsg_name" {
   value = module.enterprise_vnet.bastion_nsg_name

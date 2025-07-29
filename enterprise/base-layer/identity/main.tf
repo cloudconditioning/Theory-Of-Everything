@@ -1,17 +1,11 @@
+# Remote backend for Powershell script uplaod
+
+
 # Create the Virtual Machines for Active Directory Domain Services 
+
 ## Domain Controller 1 and 2
 ## PowerShell Script to Install AD DS and replicate
 
-
-# Create the Public IP for DC1
-resource "azurerm_public_ip" "dc1_public_ip" {
-  name                = var.dc1_public_ip_name
-  allocation_method   = var.public_ip_allocation_method
-  resource_group_name = var.resource_group_name
-  location            = var.location
-
-  tags = local.tags
-}
 
 # Create the NIC for DC1
 
@@ -21,7 +15,7 @@ resource "azurerm_network_interface" "nic_dc1" {
   resource_group_name = var.resource_group_name
 
   ip_configuration {
-    name                          = var.dc1_ip_name
+    name                          = var.dc1_private_ip_name
     subnet_id                     = var.dc1_subnet_id
     private_ip_address_allocation = var.private_ip_address_allocation
   }
@@ -29,15 +23,36 @@ resource "azurerm_network_interface" "nic_dc1" {
   tags = local.tags
 }
 
-# Storage account for Boot diagnostics
+
+
+
+# Storage account for Scripts
 resource "azurerm_storage_account" "enterprise-sa" {
-  name                     = var.storage_account_name
-  location                 = var.location
-  resource_group_name      = var.resource_group_name
-  account_tier             = var.storage_account_tier
-  account_replication_type = "LRS"
+  name                          = var.storage_account_name
+  location                      = var.location
+  resource_group_name           = var.resource_group_name
+  account_tier                  = var.storage_account_tier
+  account_replication_type      = "LRS"
+  public_network_access_enabled = true
+
 }
 
+# Create the storage container for scripting
+resource "azurerm_storage_container" "scripts_container" {
+  name                  = var.scripts_container
+  storage_account_id    = azurerm_storage_account.enterprise-sa.id
+  container_access_type = "blob"
+}
+
+# Upload File to Azure Storage
+# Upload Install ADDS PowerShell Script to Storage
+resource "azurerm_storage_blob" "adds_script" {
+  name                   = var.adds_script_name
+  storage_account_name   = azurerm_storage_account.enterprise-sa.name
+  storage_container_name = azurerm_storage_container.scripts_container.name
+  type                   = "Block"
+  source                 = "${path.module}/scripts/InstallADDS_DC1.ps1"
+}
 
 # Create the VM For DC1
 ## https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_virtual_machine
@@ -68,9 +83,10 @@ resource "azurerm_windows_virtual_machine" "vm_dc1" {
   }
 
   boot_diagnostics {
-    # Configure contributor access for GitHub UAMI first in Identity module
     storage_account_uri = azurerm_storage_account.enterprise-sa.primary_blob_endpoint
   }
+  depends_on = [azurerm_storage_account.enterprise-sa]
+
 }
 
 # VM Extension for DC1 to Install Active Directory
@@ -81,14 +97,16 @@ resource "azurerm_virtual_machine_extension" "dc1_adds_install" {
   virtual_machine_id   = azurerm_windows_virtual_machine.vm_dc1.id
   publisher            = "Microsoft.Compute"     # Validate
   type                 = "CustomScriptExtension" # Validate
-  type_handler_version = "1.9"                   # Validate
+  type_handler_version = "2.0"                   # Validate
 
-  settings = <<SETTINGS
-  {
-  
-  
-  }
-  SETTINGS
+  settings = jsonencode({
+    "fileUris" = [
+      "https://conditionedcloudent.blob.core.windows.net/scripts/InstallADDS_DC1.ps1"
+    ],
+
+    "commandToExecute" = "powershell.exe -ExecutionPolicy Unrestricted -File InstallADDS_DC1.ps1"
+  })
+  depends_on = [azurerm_storage_blob.adds_script]
 }
 
 

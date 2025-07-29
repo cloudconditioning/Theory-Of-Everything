@@ -23,5 +23,5 @@ provider "azurerm" {
   features {}
   # Set Subscription ID using the environment variable `ARM_SUBSCRIPTION_ID`
   # export ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv) - Bash
-  # $env:ARM_SUBSCRIPTION_ID=$(az account show --query id -o
+  # $env:ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
 }

@@ -32,6 +32,13 @@ output "bastion_nsg_rules" {
   }
 }
 
+# Subnet IDs
+output "subnet_ids" {
+  value = {
+    for subnet_name, subnet in azurerm_subnet.enterprise_subnets :
+    subnet_name => subnet.id
+  }
+}
 /*
 ######### Subnet NSG rules - I have not created the NSG rules for the other subnets yet
 output "subnet_nsg_rules" {
@@ -71,5 +78,8 @@ output "bastion_shutdown_time" {
 output "bastion_shutdown_id" {
   value = azurerm_dev_test_global_vm_shutdown_schedule.bastion_shutdown.id
 }
+
+
+
 
 

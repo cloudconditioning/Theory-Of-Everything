@@ -16,12 +16,12 @@ terraform {
 
   required_version = "~> 1.12.0"
 
-#https://spacelift.io/blog/terraform-migrate-state#example-migrating-local-state-to-azure-storage-account-remote-backend
+  #https://spacelift.io/blog/terraform-migrate-state#example-migrating-local-state-to-azure-storage-account-remote-backend
   backend "azurerm" {
-    resource_group_name = "rg-tfstate-enterprise"
+    resource_group_name  = "rg-tfstate-enterprise"
     storage_account_name = "tfstateccj71qzqqm"
-    container_name = "tfstate"
-    key = "storage.tfstate"
+    container_name       = "tfstate"
+    key                  = "storage.tfstate"
   }
 }
 
@@ -85,6 +85,12 @@ resource "azurerm_storage_container" "container_remote_backend" {
   }
 }
 
+resource "azurerm_storage_container" "scripts" {
+  name                  = "scripts"
+  storage_account_id    = azurerm_storage_account.backend_storage_account.id
+  container_access_type = "private"
+}
+
 # Get info on current user for the storage account contribution
 ## https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config
 data "azurerm_client_config" "current" {}
@@ -93,5 +99,5 @@ data "azurerm_client_config" "current" {}
 resource "azurerm_role_assignment" "storage_blob_data_contributor" {
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = data.azurerm_client_config.current.object_id
-  scope                = azurerm_storage_container.container_remote_backend.id
+  scope                = azurerm_storage_account.backend_storage_account.id
 }

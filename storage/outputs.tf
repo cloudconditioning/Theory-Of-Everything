@@ -9,6 +9,6 @@ output "name_of_storage_account" {
 }
 
 output "name_of_storage_container" {
-  value = azurerm_storage_container.container_remote_backend.name
+  value       = azurerm_storage_container.container_remote_backend.name
   description = "Name of the Azure Storage Container for the Remote Backend."
 }
