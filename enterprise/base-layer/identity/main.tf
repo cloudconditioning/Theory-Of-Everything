@@ -101,7 +101,8 @@ resource "azurerm_virtual_machine_extension" "dc1_adds_install" {
 
   settings = jsonencode({
     "fileUris" = [
-      "https://conditionedcloudent.blob.core.windows.net/scripts/InstallADDS_DC1.ps1"
+      # "https://conditionedcloudent.blob.core.windows.net/scripts/InstallADDS_DC1.ps1"
+      "https://conditionedcloudent.blob.core.windows.net/scripts/InstallADDS_DC1.ps1?sp=r&st=2025-08-01T16:42:12Z&se=2025-08-02T00:57:12Z&spr=https&sv=2024-11-04&sr=b&sig=JTp01tbSrX1JFBsfBspaHbYW0LbKZUjmDXzRm%2F2aVM0%3D"
     ],
 
     "commandToExecute" = "powershell.exe -ExecutionPolicy Unrestricted -File InstallADDS_DC1.ps1"
