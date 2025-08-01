@@ -57,7 +57,7 @@ variable "dc1_username" {
 
 variable "dc1_password" {
   type    = string
-  default = "TupacWayne2025"
+  default = "TupacWayne2025!"
 }
 
 variable "storage_account_name" {
