@@ -76,6 +76,7 @@ resource "azurerm_windows_virtual_machine" "vm_dc1" {
   admin_password             = var.dc1_password
   provision_vm_agent         = true # Required to use VM Extensions / PowerShell
   allow_extension_operations = true
+
   network_interface_ids = [
     azurerm_network_interface.nic_dc1.id
   ]
@@ -98,6 +99,7 @@ resource "azurerm_windows_virtual_machine" "vm_dc1" {
   depends_on = [azurerm_storage_account.enterprise-sa]
 
 }
+/*
 
 # VM Extension for DC1 to Install Active Directory
 ## https://registry.terraform.io/providers/hashicorp/Azurerm/latest/docs/resources/virtual_machine_extension
@@ -120,6 +122,6 @@ resource "azurerm_virtual_machine_extension" "dc1_adds_install" {
 }
 
 
-
+*/
 
 # Auto shutdown for DC1

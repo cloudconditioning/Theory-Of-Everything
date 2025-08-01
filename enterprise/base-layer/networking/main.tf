@@ -33,7 +33,7 @@ resource "azurerm_virtual_network" "vnet" {
   location            = data.azurerm_resource_group.rg-enterprise.location
   resource_group_name = data.azurerm_resource_group.rg-enterprise.name
   address_space       = var.vnet_address_space
-  dns_servers         = var.dns_servers_addresses
+  dns_servers         = []
 
   tags = local.bastion_tags
 
