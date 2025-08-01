@@ -97,7 +97,7 @@ resource "azurerm_virtual_machine_extension" "dc1_adds_install" {
   virtual_machine_id   = azurerm_windows_virtual_machine.vm_dc1.id
   publisher            = "Microsoft.Compute"     # Validate
   type                 = "CustomScriptExtension" # Validate
-  type_handler_version = "1.10"                  # Validate
+  type_handler_version = "1.9"                   # Validate
 
   settings = jsonencode({
     "fileUris" = [
