@@ -9,7 +9,7 @@
 # Create a public IP for DC1 to allow for installation of PowerShell Script
 resource "azurerm_public_ip" "pip_dc1" {
   name                = var.dc1_public_ip_name
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
   location            = var.location
   resource_group_name = var.resource_group_name
   tags                = local.tags
