@@ -6,6 +6,15 @@
 ## Domain Controller 1 and 2
 ## PowerShell Script to Install AD DS and replicate
 
+# Create a public IP for DC1 to allow for installation of PowerShell Script
+resource "azurerm_public_ip" "pip_dc1" {
+  name                = var.dc1_public_ip_name
+  allocation_method   = "Dynamic"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  tags                = local.tags
+
+}
 
 # Create the NIC for DC1
 
@@ -18,6 +27,7 @@ resource "azurerm_network_interface" "nic_dc1" {
     name                          = var.dc1_private_ip_name
     subnet_id                     = var.dc1_subnet_id
     private_ip_address_allocation = var.private_ip_address_allocation
+    public_ip_address_id          = azurerm_public_ip.pip_dc1.id
   }
 
   tags = local.tags
@@ -101,14 +111,15 @@ resource "azurerm_virtual_machine_extension" "dc1_adds_install" {
 
   settings = jsonencode({
     "fileUris" = [
-      # "https://conditionedcloudent.blob.core.windows.net/scripts/InstallADDS_DC1.ps1"
-      "https://conditionedcloudent.blob.core.windows.net/scripts/InstallADDS_DC1.ps1?sp=r&st=2025-08-01T16:42:12Z&se=2025-08-02T00:57:12Z&spr=https&sv=2024-11-04&sr=b&sig=JTp01tbSrX1JFBsfBspaHbYW0LbKZUjmDXzRm%2F2aVM0%3D"
+      "https://conditionedcloudent.blob.core.windows.net/scripts/InstallADDS_DC1.ps1"
     ],
 
     "commandToExecute" = "powershell.exe -ExecutionPolicy Unrestricted -File InstallADDS_DC1.ps1"
   })
   depends_on = [azurerm_storage_blob.adds_script]
 }
+
+
 
 
 # Auto shutdown for DC1
